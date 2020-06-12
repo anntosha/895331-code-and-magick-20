@@ -5,10 +5,10 @@ var CLOUD_HEIGHT = 270;
 var CLOUD_X = 100;
 var CLOUD_Y = 10;
 var GAP = 20;
-var FONT_GAP = 15;
-var TEXT_WIDTH = 50;
-var BAR_HEIGHT = 20;
-var BAR_WITH = CLOUD_WIDTH - GAP - TEXT_WIDTH - GAP;
+var GAP_BAR = 40;
+var TEXT_HEIGHT = 30;
+var BAR_WIDTH = 50;
+var BAR_HEIGHT = 150;
 var hooray = 'Ура вы победили!';
 var results = 'Список результатов:';
 
@@ -27,7 +27,6 @@ var renderText = function (ctx) {
   ctx.fillText(hooray, CLOUD_X + GAP, CLOUD_Y + GAP);
   ctx.fillText(results, CLOUD_X + GAP, CLOUD_Y + GAP * 2);
 };
-
 
 // Находим максимальные результаты
 var getMaxElement = function (arr) {
@@ -49,16 +48,20 @@ window.renderStatistics = function (ctx, players, times) {
   var maxTime = getMaxElement(times);
 
   for (var i = 0; i < players.length; i++) {
+    var heightBar = (BAR_HEIGHT * times[i]) / maxTime;
     var selfColorBar = 'rgba(255, 0, 0, 1.0)';
     var colorBar = 'rgba(0, 0, 255, ' + Math.random() + ')';
-    debugger
-    ctx.fillText(players[i], CLOUD_X + GAP, CLOUD_Y + GAP + FONT_GAP + (GAP + BAR_HEIGHT) * i);
-    ctx.fillRect(CLOUD_X + GAP + TEXT_WIDTH, CLOUD_Y + GAP + (GAP + BAR_HEIGHT) * i, (BAR_WITH * times[i]) / maxTime, BAR_HEIGHT);
+
+    ctx.fillStyle = '#000';
+    ctx.fillText(Math.round(times[i]), CLOUD_X + GAP_BAR + (GAP_BAR + BAR_WIDTH) * i, BAR_HEIGHT - heightBar + CLOUD_Y + TEXT_HEIGHT * 2);
+
+    ctx.fillStyle = '#000';
+    ctx.fillText(players[i], CLOUD_X + GAP_BAR + (GAP_BAR + BAR_WIDTH) * i, CLOUD_Y + CLOUD_HEIGHT - TEXT_HEIGHT);
+
     if (players[i] === 'Вы') {
       colorBar = selfColorBar;
     }
-    console.log(players[i]);
-    console.log(colorBar);
     ctx.fillStyle = colorBar;
+    ctx.fillRect(CLOUD_X + GAP_BAR + (GAP_BAR + BAR_WIDTH) * i, BAR_HEIGHT - heightBar + CLOUD_Y + TEXT_HEIGHT + CLOUD_Y + GAP * 2, BAR_WIDTH, heightBar);
   }
 };
